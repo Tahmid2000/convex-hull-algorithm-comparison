@@ -54,6 +54,8 @@ const Canvas = props => {
         style={{ border: "solid 2px #000000" }}
         className="mx-auto rounded mt-2"
       ></canvas>
+      <h1 class="font-extrabold">{props.toDraw.phase}</h1>
+      <p>{props.toDraw.message}</p>
     </div>
   );
 };
