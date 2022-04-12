@@ -1,11 +1,10 @@
-import logo from "./logo.svg";
 import "./App.css";
-import Canvas from "./components/Canvas";
+import InitialCanvas from "./components/InitialCanvas";
 
 function App() {
   return (
     <div className="App">
-      <Canvas />
+      <InitialCanvas />
     </div>
   );
 }
