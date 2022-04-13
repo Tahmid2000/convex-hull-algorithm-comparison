@@ -1,5 +1,5 @@
-import React, { useRef, useEffect, useState } from "react";
-import { grahamScan } from "../algorithms/GrahamScan";
+import React, { useRef, useState } from "react";
+// import { grahamScan } from "../algorithms/GrahamScan";
 import CanvasGrahamVisualization from "./CanvasGrahamScanVisualization";
 
 const InitialCanvas = props => {
@@ -17,16 +17,16 @@ const InitialCanvas = props => {
     context.fill();
   };
 
-  const drawLine = (point1, point2, color) => {
-    const canvas = canvasRef.current;
-    const context = canvas.getContext("2d");
-    context.strokeStyle = color;
-    context.lineWidth = 5;
-    context.beginPath();
-    context.moveTo(point1[0], point1[1]);
-    context.lineTo(point2[0], point2[1]);
-    context.stroke();
-  };
+  // const drawLine = (point1, point2, color) => {
+  //   const canvas = canvasRef.current;
+  //   const context = canvas.getContext("2d");
+  //   context.strokeStyle = color;
+  //   context.lineWidth = 5;
+  //   context.beginPath();
+  //   context.moveTo(point1[0], point1[1]);
+  //   context.lineTo(point2[0], point2[1]);
+  //   context.stroke();
+  // };
 
   const handleClick = event => {
     var rect = canvasRef.current.getBoundingClientRect();
@@ -61,12 +61,12 @@ const InitialCanvas = props => {
     //console.log(points); //check: for some reason this outputs an array of length 0 after first click
   };
 
-  const generateGrahamScan = () => {
-    //clearLines();
-    var convexHull = grahamScan(points);
-    for (let i = 0; i < convexHull.length - 1; i++)
-      drawLine(convexHull[i], convexHull[i + 1], "#16a34a");
-  };
+  // const generateGrahamScan = () => {
+  //   //clearLines();
+  //   var convexHull = grahamScan(points);
+  //   for (let i = 0; i < convexHull.length - 1; i++)
+  //     drawLine(convexHull[i], convexHull[i + 1], "#16a34a");
+  // };
 
   const startStepByStep = () => {
     setStepByStep(true);

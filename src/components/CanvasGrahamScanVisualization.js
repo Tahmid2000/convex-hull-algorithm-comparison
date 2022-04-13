@@ -24,7 +24,7 @@ const CanvasGrahamScanVisualization = props => {
       clearInterval(interval);
     }
     return () => clearInterval(interval);
-  }, [animating, step]);
+  }, [animating, step, scanned.length]);
 
   return (
     <div>

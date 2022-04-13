@@ -35,8 +35,8 @@ const Canvas = props => {
     for (let i = 0; i < props.points.length; i++) {
       if (
         "pointsToColor" in props.toDraw &&
-        props.points[i][0] == props.toDraw.pointsToColor[0] &&
-        props.points[i][1] == props.toDraw.pointsToColor[1]
+        props.points[i][0] === props.toDraw.pointsToColor[0] &&
+        props.points[i][1] === props.toDraw.pointsToColor[1]
       )
         drawCoordinates(props.points[i][0], props.points[i][1], "#facc15");
       else drawCoordinates(props.points[i][0], props.points[i][1], "#000000");
