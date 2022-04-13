@@ -31,6 +31,14 @@ const lowerHull = (points, visualize) => {
   points.sort(sortAscendingPoints);
   var visuliazation = [];
   var stack = [];
+  if (visualize)
+    visuliazation.push({
+      lines: [],
+      lineColors: [],
+      phase: "Phase 0: Initial",
+      message: "Initial Points",
+      stack: [...stack]
+    });
   stack.push(points[0]);
   stack.push(points[1]);
   if (visualize) {
@@ -39,7 +47,7 @@ const lowerHull = (points, visualize) => {
       lineColors: ["#b91c1c"],
       phase: "Phase 1: Lower Convex Hull",
       message:
-        "Sort points by x-coordinate and add the leftmost points to the stack",
+        "Sort points by x-coordinate and add the leftmost points to the stack.",
       stack: [...stack]
     });
   }
@@ -51,8 +59,15 @@ const lowerHull = (points, visualize) => {
           lineColors: ["#b91c1c", "#16a34a"],
           pointsToColor: points[i],
           phase: "Phase 1: Lower Convex Hull",
-          message:
-            "Using the top 2 points in the stack and the next point on the canvas, determine if the three points make a left-hand or right-hand turn. If the points make a right-hand turn, pop the top element off the stack. This process is repeated until a left-hand turn is found.",
+          message: `${
+            orientation(
+              points[i],
+              stack[stack.length - 1],
+              stack[stack.length - 2]
+            ) <= 0
+              ? "The 2 rightmost points on the current lower convex hull and the next point on the canvas make a right-hand turn so we remove the rightmost point of the lower convex hull."
+              : "The 2 rightmost points on the current lower convex hull and the next point on the canvas make a left-hand turn so we add the new point to the lower convex hull."
+          }`,
           stack: [...stack]
         });
       }
@@ -98,7 +113,7 @@ const upperHull = (points, visualize, finalLower) => {
       lineColors: ["#b91c1c", "#16a34a"],
       phase: "Phase 2: Upper Convex Hull",
       message:
-        "Sort points by x-coordinate and add the rightmost points to the stack",
+        "Sort points by x-coordinate and add the rightmost points to the stack.",
       stack: [...stack]
     });
   }
@@ -110,8 +125,15 @@ const upperHull = (points, visualize, finalLower) => {
           lineColors: ["#b91c1c", "#16a34a"],
           pointsToColor: points[i],
           phase: "Phase 2: Upper Convex Hull",
-          message:
-            "Using the top 2 points in the stack and the next point on the canvas, determine if the three points make a left-hand or right-hand turn. If the points make a right-hand turn, pop the top element off the stack. This process is repeated until a left-hand turn is found.",
+          message: `${
+            orientation(
+              points[i],
+              stack[stack.length - 1],
+              stack[stack.length - 2]
+            ) <= 0
+              ? "The 2 leftmost points on the current upper convex hull and the next point on the canvas three points make a right-hand turn so we remove the leftmost point of the upper convex hull."
+              : "The 2 leftmost points on the current upper convex hull and the next point on the canvas three points make a left-hand turn so we add the new point to the lower convex hull."
+          }`,
           stack: [...stack]
         });
       }

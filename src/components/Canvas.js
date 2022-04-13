@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from "react";
 
 const Canvas = props => {
-  console.log(props);
   const canvasRef = useRef(null);
 
   const drawCoordinates = (x, y, color) => {
@@ -25,7 +24,14 @@ const Canvas = props => {
     context.stroke();
   };
 
+  const clearCanvas = () => {
+    const canvas = canvasRef.current;
+    const context = canvas.getContext("2d");
+    context.clearRect(0, 0, canvas.width, canvas.height);
+  };
+
   useEffect(() => {
+    clearCanvas();
     for (let i = 0; i < props.points.length; i++) {
       if (
         "pointsToColor" in props.toDraw &&
@@ -44,18 +50,23 @@ const Canvas = props => {
           : props.toDraw.lineColors[1]
       );
     }
-  }, []);
+  }, [props]);
+
   return (
     <div>
-      <canvas
-        ref={canvasRef}
-        width="1000px"
-        height="700px"
-        style={{ border: "solid 2px #000000" }}
-        className="mx-auto rounded mt-2"
-      ></canvas>
-      <h1 class="font-extrabold">{props.toDraw.phase}</h1>
-      <p>{props.toDraw.message}</p>
+      <div className="">
+        <canvas
+          ref={canvasRef}
+          width="1000px"
+          height="700px"
+          style={{ border: "solid 2px #000000" }}
+          className="mx-auto rounded mt-2"
+        ></canvas>
+      </div>
+      <div className="mt-1">
+        <h1 class="font-extrabold">{props.toDraw.phase}</h1>
+        <p>{props.toDraw.message}</p>
+      </div>
     </div>
   );
 };

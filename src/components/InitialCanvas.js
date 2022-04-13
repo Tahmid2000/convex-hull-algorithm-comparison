@@ -5,6 +5,7 @@ import CanvasGrahamVisualization from "./CanvasGrahamScanVisualization";
 const InitialCanvas = props => {
   const canvasRef = useRef(null);
   const [points, setPoints] = useState([]);
+  const [stepByStep, setStepByStep] = useState(false);
 
   const drawCoordinates = (x, y, color) => {
     const canvas = canvasRef.current;
@@ -57,7 +58,7 @@ const InitialCanvas = props => {
       drawCoordinates(randomX, randomY, "#000000");
       setPoints(oldArray => [...oldArray, [randomX, randomY]]);
     }
-    console.log(points); //check: for some reason this outputs an array of length 0 after first click
+    //console.log(points); //check: for some reason this outputs an array of length 0 after first click
   };
 
   const generateGrahamScan = () => {
@@ -67,17 +68,26 @@ const InitialCanvas = props => {
       drawLine(convexHull[i], convexHull[i + 1], "#16a34a");
   };
 
+  const startStepByStep = () => {
+    setStepByStep(true);
+  };
+
+  const stopStepByStep = () => {
+    console.log(points.length);
+    setStepByStep(false);
+    for (let i = 0; i < points.length; i++)
+      drawCoordinates(points[i][0], points[i][1], "#000000");
+  };
   return (
     <div>
       <button
         className="bg-slate-700 hover:bg-slate-800 text-white font-bold py-2 px-4 rounded disabled:bg-slate-900"
-        onClick={generateGrahamScan}
+        onClick={startStepByStep}
         style={{ marginTop: "2rem" }}
-        disabled={points.length < 2}
+        disabled={points.length < 2 || stepByStep}
       >
         Graham's Scan
       </button>
-
       <canvas
         ref={canvasRef}
         width="1000px"
@@ -85,23 +95,37 @@ const InitialCanvas = props => {
         style={{ border: "solid 2px #000000" }}
         onClick={handleClick}
         className="mx-auto rounded mt-2"
+        hidden={stepByStep}
       />
-      <br />
-      <button
-        className="bg-slate-700 hover:bg-slate-800 text-white font-bold py-2 px-4 rounded mr-1"
-        onClick={clearCanvas}
-      >
-        Clear Canvas
-      </button>
-      <button
-        className="bg-slate-700 hover:bg-slate-800 text-white font-bold py-2 px-4 rounded ml-1"
-        onClick={generateRandom}
-      >
-        Random Points
-      </button>
-      <CanvasGrahamVisualization points={points} />
+      {!stepByStep ? (
+        <React.Fragment>
+          <br />
+          <button
+            className="bg-slate-700 hover:bg-slate-800 text-white font-bold py-2 px-4 rounded mr-1"
+            onClick={clearCanvas}
+          >
+            Clear Canvas
+          </button>
+          <button
+            className="bg-slate-700 hover:bg-slate-800 text-white font-bold py-2 px-4 rounded ml-1"
+            onClick={generateRandom}
+          >
+            Random Points
+          </button>
+        </React.Fragment>
+      ) : (
+        <React.Fragment>
+          <CanvasGrahamVisualization points={points} />
+          <br />
+          <button
+            className="bg-slate-700 hover:bg-slate-800 text-white font-bold py-2 px-4 rounded mr-1"
+            onClick={stopStepByStep}
+          >
+            Stop Step-By-Step
+          </button>
+        </React.Fragment>
+      )}
     </div>
   );
 };
-//<CanvasGrahamVisualization points={points} />
 export default InitialCanvas;
