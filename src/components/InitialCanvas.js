@@ -1,11 +1,12 @@
 import React, { useRef, useState } from "react";
 // import { grahamScan } from "../algorithms/GrahamScan";
 import CanvasGrahamVisualization from "./CanvasGrahamScanVisualization";
+import CanvasJarvisVisualization from "./CanvasJarvisMarchVisualization";
 
 const InitialCanvas = props => {
   const canvasRef = useRef(null);
   const [points, setPoints] = useState([]);
-  const [stepByStep, setStepByStep] = useState(false);
+  const [stepByStep, setStepByStep] = useState(0);
 
   const drawCoordinates = (x, y, color) => {
     const canvas = canvasRef.current;
@@ -68,13 +69,16 @@ const InitialCanvas = props => {
   //     drawLine(convexHull[i], convexHull[i + 1], "#16a34a");
   // };
 
-  const startStepByStep = () => {
-    setStepByStep(true);
+  const startStepByStepGraham = () => {
+    setStepByStep(1);
+  };
+  const startStepByStepJarvis = () => {
+    setStepByStep(2);
   };
 
   const stopStepByStep = () => {
     console.log(points.length);
-    setStepByStep(false);
+    setStepByStep(0);
     for (let i = 0; i < points.length; i++)
       drawCoordinates(points[i][0], points[i][1], "#000000");
   };
@@ -82,11 +86,19 @@ const InitialCanvas = props => {
     <div>
       <button
         className="bg-slate-700 hover:bg-slate-800 text-white font-bold py-2 px-4 rounded disabled:bg-slate-900"
-        onClick={startStepByStep}
+        onClick={startStepByStepGraham}
         style={{ marginTop: "2rem" }}
         disabled={points.length < 2 || stepByStep}
       >
         Graham's Scan
+      </button>
+      <button
+        className="bg-slate-700 hover:bg-slate-800 text-white font-bold py-2 px-4 rounded disabled:bg-slate-900"
+        onClick={startStepByStepJarvis}
+        style={{ marginTop: "2rem" }}
+        disabled={points.length < 2 || stepByStep}
+      >
+        Jarvis's March
       </button>
       <canvas
         ref={canvasRef}
@@ -97,7 +109,7 @@ const InitialCanvas = props => {
         className="mx-auto rounded mt-2"
         hidden={stepByStep}
       />
-      {!stepByStep ? (
+      {stepByStep === 0 ? (
         <React.Fragment>
           <br />
           <button
@@ -113,7 +125,7 @@ const InitialCanvas = props => {
             Random Points
           </button>
         </React.Fragment>
-      ) : (
+      ) :  stepByStep === 1 ? ( 
         <React.Fragment>
           <CanvasGrahamVisualization points={points} />
           <br />
@@ -124,8 +136,21 @@ const InitialCanvas = props => {
             Stop Step-By-Step
           </button>
         </React.Fragment>
-      )}
+      ) : (
+        <React.Fragment>
+          <CanvasJarvisVisualization points={points} />
+          <br />
+          <button
+            className="bg-slate-700 hover:bg-slate-800 text-white font-bold py-2 px-4 rounded mr-1"
+            onClick={stopStepByStep}
+          >
+            Stop Step-By-Step
+          </button>
+        </React.Fragment>
+      )
+    }
     </div>
+    
   );
 };
 export default InitialCanvas;
