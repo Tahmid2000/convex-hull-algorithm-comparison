@@ -83,7 +83,7 @@ const generateHull = (points, visualize) => {
           pointsToColor: bestPt,
           phase: "Phase 2: Creating Convex Hull",
           message: `${
-            "Checking for point which forms minimum turning angle with the . Highlighted point is the current best point"
+            "Checking for point which forms minimum turning angle with the last segment in the partial hull. Highlighted point is the current best point"
           }`,
           stack: [...stack]
         });
