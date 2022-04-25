@@ -63,8 +63,8 @@ const generateHull = (points, visualize) => {
   }
   while (stack[stack.length-1] !== stack[1] || stack.length === 2) {
     var bestPt = stack[stack.length-2];
-    for (let i = 1; i < points.length; i++) {
-      if(points[i] === stack[stack.length-1] || points[i] === stack[stack.length-2])
+    for (let i = 0; i < points.length; i++) {
+      if(points[i] === stack[stack.length-1])
         continue;
       var curOr = orientation(
         points[i],
@@ -83,7 +83,7 @@ const generateHull = (points, visualize) => {
           pointsToColor: bestPt,
           phase: "Phase 2: Creating Convex Hull",
           message: `${
-            "Checking for point which forms minimum turning angle with the partial hull. Highlighted point is the current best point"
+            "Checking for point which forms minimum turning angle with the . Highlighted point is the current best point"
           }`,
           stack: [...stack]
         });
