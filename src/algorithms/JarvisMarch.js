@@ -21,18 +21,15 @@ const orientation = (p, q, r) => {
   return determinant(matrix);
 };
 
-const findBottomPoint = (points) =>
-{
+const findBottomPoint = points => {
   var bottomPoint = points[0];
-  for(let i = 1; i < points.length; i++)
-  {
-    if(points[i][1] > bottomPoint[1])
-    {
+  for (let i = 1; i < points.length; i++) {
+    if (points[i][1] > bottomPoint[1]) {
       bottomPoint = points[i];
     }
   }
   return bottomPoint;
-}
+};
 
 const generateHull = (points, visualize) => {
   if (points.length < 2) return;
@@ -47,7 +44,7 @@ const generateHull = (points, visualize) => {
       stack: [...stack]
     });
   var bottom = findBottomPoint(points);
-  var placeHolder = [bottom[0]-1, bottom[1]];
+  var placeHolder = [bottom[0] - 1, bottom[1]];
   stack.push(placeHolder);
   stack.push(bottom);
   if (visualize) {
@@ -56,35 +53,26 @@ const generateHull = (points, visualize) => {
       lineColors: ["#b91c1c"],
       pointsToColor: bottom,
       phase: "Phase 1: Select bottom point",
-      message:
-        "Locate the lowest point and add it to the hull",
+      message: "Locate the lowest point and add it to the hull.",
       stack: [...stack]
     });
   }
-  while (stack[stack.length-1] !== stack[1] || stack.length === 2) {
-    var bestPt = stack[stack.length-2];
+  while (stack[stack.length - 1] !== stack[1] || stack.length === 2) {
+    var bestPt = stack[stack.length - 2];
     for (let i = 0; i < points.length; i++) {
-      if(points[i] === stack[stack.length-1])
-        continue;
-      var curOr = orientation(
-        points[i],
-        stack[stack.length - 1],
-        bestPt
-      )
-      if(curOr > 0)
-      {
-        bestPt = points[i]
+      if (points[i] === stack[stack.length - 1]) continue;
+      var curOr = orientation(points[i], stack[stack.length - 1], bestPt);
+      if (curOr > 0) {
+        bestPt = points[i];
       }
       if (visualize) {
         visuliazation.push({
           lines: [...stack, points[i]],
           lineColors: ["#b91c1c", "#16a34a"],
           pointsToColor: points[i],
-          pointsToColor: bestPt,
+          bestPointToColor: bestPt,
           phase: "Phase 2: Creating Convex Hull",
-          message: `${
-            "Checking for point which forms minimum turning angle with the last segment in the partial hull. Highlighted point is the current best point"
-          }`,
+          message: `${"Checking for point which forms minimum turning angle with the last segment in the partial hull. Green highlighted point is the current best point."}`,
           stack: [...stack]
         });
       }
@@ -95,7 +83,7 @@ const generateHull = (points, visualize) => {
     visuliazation.push({
       lines: [...stack],
       lineColors: ["#16a34a", "#16a34a"],
-      phase: "Phase 3: Finished",
+      phase: "Phase 2: Finished",
       message: "Convex Hull complete!",
       stack: [...stack]
     });

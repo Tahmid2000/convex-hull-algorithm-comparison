@@ -1,10 +1,62 @@
 import React, { useEffect, useState } from "react";
-import { jarvisMarchVisualization } from "../algorithms/JarvisMarch";
-import Canvas from "./Canvas";
 
-const CanvasJarvisMarchVisualization = ({ points, scanned }) => {
+import CanvasChan from "./CanvasChan";
+import {
+  generateHull,
+  chanAlgorithm,
+  chanAlgorithmVisualization
+} from "../algorithms/ChanAlgorithm";
+
+const CanvasChanVisualization = ({ points, scanned }) => {
   const [step, setStep] = useState(0);
   const [animating, setAnimating] = useState(false);
+  // console.log(chanAlgorithm(props.points));
+  var points1 = [
+    [315, 507],
+    [572, 248],
+    [354, 644],
+    [714, 74],
+    [505, 316],
+    [452, 575],
+    [561, 553],
+    [432, 520],
+    [738, 374],
+    [721, 545]
+  ];
+  var points2 = [
+    [928, 511],
+    [64, 428],
+    [789, 119],
+    [813, 507],
+    [641, 526],
+    [626, 491],
+    [576, 390],
+    [109, 537],
+    [361, 150],
+    [486, 428],
+    [566, 90],
+    [359, 478],
+    [669, 475],
+    [104, 155],
+    [313, 100],
+    [326, 411],
+    [206, 327],
+    [710, 192],
+    [389, 482],
+    [505, 609],
+    [847, 627],
+    [613, 370],
+    [798, 559],
+    [228, 159],
+    [160, 456],
+    [418, 433],
+    [452, 647],
+    [346, 254],
+    [471, 218]
+  ];
+  //const scanned = chanAlgorithmVisualization(points);
+  // console.log(scanned);
+  //console.log(generateHull(points));
 
   const handlePageChange = increment => {
     if (!(step + increment < 0 || step + increment >= scanned.length))
@@ -27,7 +79,7 @@ const CanvasJarvisMarchVisualization = ({ points, scanned }) => {
 
   return (
     <div>
-      <Canvas points={points} toDraw={scanned[step]} />
+      <CanvasChan points={points} toDraw={scanned[step]} />
       <button
         onClick={() => handlePageChange(step * -1)}
         hidden={animating ? true : false}
@@ -74,47 +126,4 @@ const CanvasJarvisMarchVisualization = ({ points, scanned }) => {
     </div>
   );
 };
-export default CanvasJarvisMarchVisualization;
-// var points = [
-//   [315, 507],
-//   [572, 248],
-//   [354, 644],
-//   [714, 74],
-//   [505, 316],
-//   [452, 575],
-//   [561, 553],
-//   [432, 520],
-//   [738, 374],
-//   [721, 545]
-// ];
-// var points = [
-//   [928, 511],
-//   [64, 428],
-//   [789, 119],
-//   [813, 507],
-//   [641, 526],
-//   [626, 491],
-//   [576, 390],
-//   [109, 537],
-//   [361, 150],
-//   [486, 428],
-//   [566, 90],
-//   [359, 478],
-//   [669, 475],
-//   [104, 155],
-//   [313, 100],
-//   [326, 411],
-//   [206, 327],
-//   [710, 192],
-//   [389, 482],
-//   [505, 609],
-//   [847, 627],
-//   [613, 370],
-//   [798, 559],
-//   [228, 159],
-//   [160, 456],
-//   [418, 433],
-//   [452, 647],
-//   [346, 254],
-//   [471, 218]
-// ];
+export default CanvasChanVisualization;

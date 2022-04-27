@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import { grahamScanVisualization } from "../algorithms/GrahamScan";
 import Canvas from "./Canvas";
 
-const CanvasGrahamScanVisualization = props => {
+const CanvasGrahamScanVisualization = ({ points, scanned }) => {
   const [step, setStep] = useState(0);
   const [animating, setAnimating] = useState(false);
-  const scanned = grahamScanVisualization(props.points);
-
+  // const scanned = grahamScanVisualization(props.points);
+  // console.log(scanned);
   const handlePageChange = increment => {
     if (!(step + increment < 0 || step + increment >= scanned.length))
       setStep(step + increment);
@@ -17,7 +17,7 @@ const CanvasGrahamScanVisualization = props => {
     if (step < scanned.length - 1 && animating) {
       interval = setInterval(() => {
         setStep(step + 1);
-      }, 1500);
+      }, 500);
     } else {
       //setStep(step - step);
       setAnimating(false);
@@ -28,7 +28,7 @@ const CanvasGrahamScanVisualization = props => {
 
   return (
     <div>
-      <Canvas points={props.points} toDraw={scanned[step]} />
+      <Canvas points={points} toDraw={scanned[step]} />
       <button
         onClick={() => handlePageChange(step * -1)}
         hidden={animating ? true : false}

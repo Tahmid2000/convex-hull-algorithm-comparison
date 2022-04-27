@@ -27,7 +27,6 @@ const orientation = (p, topOfStack, secondOfStack) => {
 };
 
 const lowerHull = (points, visualize) => {
-  if (points.length < 2) return;
   points.sort(sortAscendingPoints);
   var visuliazation = [];
   var stack = [];
@@ -101,7 +100,6 @@ const sortDescendingPoints = (a, b) => {
 };
 
 const upperHull = (points, visualize, finalLower) => {
-  if (points.length < 2) return;
   points.sort(sortDescendingPoints);
   var visuliazation = [];
   var stack = [];
