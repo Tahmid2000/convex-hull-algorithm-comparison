@@ -51,29 +51,41 @@ const orientation = (p, q, r) => {
   return 1;
 };
 
-const tangentPoint = (point, hull) => {
-  let l = 0;
-  let r = hull.length;
-  let lprev = orientation(point, hull[0], hull[hull.length - 1]);
-  let lnext = orientation(point, hull[0], hull[(l + 1) % r]);
-  while (l < r) {
-    let mid = Math.floor((l + r) / 2);
-    let midPrev = orientation(point, hull[mid], hull[(mid - 1) % hull.length]);
-    let midNext = orientation(point, hull[mid], hull[(mid + 1) % hull.length]);
-    let midSide = orientation(point, hull[l], hull[mid]);
-    if (midPrev >= 0 && midNext >= 0) return hull[mid];
-    else if (
-      (midSide > 0 && (lnext < 0 || lprev === lnext)) ||
-      (midSide < 0 && midPrev < 0)
-    )
-      r = mid;
-    else {
-      l = mid + 1;
-      lprev = -1 * midNext;
-      lnext = orientation(point, hull[l], hull[(l + 1) % hull.length]);
-    }
+var mod = function(n, m) {
+  var remain = n % m;
+  return Math.floor(remain >= 0 ? remain : remain + m);
+};
+
+const tangentPoint = (pointi, pointi1, hull, visualize) => {
+  var bestPt = pointi1;
+  let visualizations = [];
+  if (hull.length == 1) {
+    if (visualize)
+      visualizations.push({
+        pointsToColor: hull[0],
+        bestPointToColor: hull[0],
+        phase: "Phase 3: Jarvis March",
+        message:
+          "Find the tangent point of each hull which creates the minimum turning angle with the last segment in the partial hull. Green highlighted point is the current best point."
+      });
+    return [hull[0], visualizations];
   }
-  return hull[l];
+  for (let i = 0; i < hull.length - 1; i++) {
+    if (hull[i] === pointi) continue;
+    if (i !== 0 && hull[i] === hull[i - 1]) continue;
+    var curOr = orientation(hull[i], pointi, bestPt);
+    if (visualize) {
+      visualizations.push({
+        pointsToColor: hull[i],
+        bestPointToColor: bestPt,
+        phase: "Phase 3: Jarvis March",
+        message:
+          "Find the tangent point of each hull which creates the minimum turning angle with the last segment in the partial hull. Green highlighted point is the current best point."
+      });
+    }
+    if (curOr > 0) bestPt = hull[i];
+  }
+  return [bestPt, visualizations];
 };
 
 const partialHull = (points, h, visualize) => {
@@ -85,7 +97,7 @@ const partialHull = (points, h, visualize) => {
   if (visualize) {
     visualizations.push({
       phase: "Phase 1: Partition",
-      message: "Partition points into multiple groups.",
+      message: `Partition points into multiple groups of at most ${h} points. `,
       partitions: [...partitions],
       color: [...colors]
     });
@@ -114,8 +126,8 @@ const partialHull = (points, h, visualize) => {
       grahams[i] = grahamScan(partitions[i]);
     }
   }
-  let v = [findBottomPoint(points)]; //[Number.MIN_SAFE_INTEGER, 0],
-
+  let bottom = findBottomPoint(points);
+  let v = [[bottom[0] - 1, bottom[1]], bottom]; //[Number.MIN_SAFE_INTEGER, 0],
   if (visualize) {
     visualizations.push({
       partitions: [...partitions],
@@ -126,18 +138,71 @@ const partialHull = (points, h, visualize) => {
       prevLines: [...prevHulls]
     });
   }
-  // for (let i = 0; i < h; i++) {
-  //   let bestPt = [];
-  //   for (let j = 0; j < k; j++) {
-  //     let tempPoint = tangentPoint(v[v.length - 1], grahams[j]);
-  //     if (bestPt.length == 0) bestPt = [...tempPoint];
-  //     else if (orientation(v[v.length - 1], bestPt, tempPoint) <= 0)
-  //       bestPt = [...tempPoint];
-  //   }
-  //   v.push(bestPt);
-  //   if (bestPt[0] === v[0][0] && bestPt[1] === v[0][1])
-  //     return [true, visualizations, v];
-  // }
+  let bestPts = [];
+  for (let i = 0; i < h; i++) {
+    let bestPt = [];
+    for (let j = 0; j < k; j++) {
+      let tangent = tangentPoint(
+        v[v.length - 1],
+        v[v.length - 2],
+        grahams[j],
+        visualize
+      );
+      let tempPoint = tangent[0];
+      if (visualize) {
+        for (let k = 0; k < tangent[1].length; k++) {
+          tangent[1][k].partitions = [...partitions];
+          tangent[1][k].color = [...colors];
+          tangent[1][k].prevLines = [...prevHulls];
+          tangent[1][k].selectedPrevHull = j;
+          tangent[1][k].lines = [...v, tangent[1][k].pointsToColor];
+          tangent[1][k].lineColors = ["#b91c1c", "#16a34a"];
+        }
+        visualizations = visualizations.concat(tangent[1]);
+      }
+      bestPts.push(tempPoint);
+      if (bestPt.length == 0) bestPt = [...tempPoint];
+      else if (orientation(tempPoint, v[v.length - 1], bestPt) > 0)
+        bestPt = [...tempPoint];
+    }
+    if (visualize) {
+      visualizations.push({
+        partitions: [...partitions],
+        color: [...colors],
+        bestPoints: [...bestPts],
+        bestPointToColor: bestPt,
+        phase: "Phase 3: Jarvis March",
+        message:
+          "Using the best points calculated from each hull (highlighted in yellow), add the best point out of those to the partial hull (highlighted in green).",
+        prevLines: [...prevHulls],
+        lines: [...v],
+        lineColors: ["#b91c1c", "#16a34a"]
+      });
+    }
+    bestPts = [];
+    v.push(bestPt);
+    if (bestPt[0] === v[1][0] && bestPt[1] === v[1][1]) {
+      if (visualize) {
+        visualizations.push({
+          partitions: [...partitions],
+          color: [...colors],
+          phase: "Phase 3: Jarvis March",
+          message: "Convex hull complete!",
+          prevLines: [...prevHulls],
+          lines: [...v],
+          lineColors: ["#16a34a", "#16a34a"]
+        });
+      }
+      return [true, visualizations, v];
+    }
+  }
+  visualizations.push({
+    phase: "Phase 4: Restart",
+    message: `It was not possible to build a convex hull with ${h} points, so the process restarts with ${Math.min(
+      h ** 2,
+      points.length
+    )} points.`
+  });
   return [false, visualizations, null];
 };
 
@@ -146,20 +211,19 @@ const generateHull = (points, visualize) => {
   if (visualize) {
     visualizations.push({
       phase: "Phase 0: Initial Points",
-      message: "Initial Points"
+      message: "Initial Points."
     });
   }
   let h = 2;
   let status = false;
   let stack = [];
-  while (!status && h <= 4) {
+  while (!status) {
     h = Math.min(h ** 2, points.length);
     let res = partialHull(points, h, visualize);
     if (visualize) visualizations = visualizations.concat(res[1]);
     status = res[0];
     if (status) stack = [...res[2]];
   }
-  console.log(stack);
   return [stack, visualizations];
 };
 

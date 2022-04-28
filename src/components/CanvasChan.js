@@ -32,41 +32,15 @@ const CanvasChan = props => {
 
   useEffect(() => {
     clearCanvas();
-    if (props.toDraw.phase === "Phase 0: Initial Points") {
+    if (
+      props.toDraw.phase === "Phase 0: Initial Points" ||
+      props.toDraw.phase === "Phase 4: Restart"
+    ) {
       for (let i = 0; i < props.points.length; i++)
         drawCoordinates(props.points[i][0], props.points[i][1], "#000000");
     }
-    if (
-      props.toDraw.phase === "Phase 1: Partition" ||
-      props.toDraw.phase === "Phase 2: Graham Scan on each partition" ||
-      props.toDraw.phase === "Phase 3: Jarvis March"
-    ) {
-      for (let i = 0; i < props.toDraw.partitions.length; i++) {
-        for (let j = 0; j < props.toDraw.partitions[i].length; j++) {
-          drawCoordinates(
-            props.toDraw.partitions[i][j][0],
-            props.toDraw.partitions[i][j][1],
-            props.toDraw.color[i]
-          );
-        }
-      }
-    }
-    if (props.toDraw.phase === "Phase 2: Graham Scan on each partition") {
-      for (let i = 0; i < props.toDraw.lines.length - 1; i++) {
-        drawLine(
-          props.toDraw.lines[i],
-          props.toDraw.lines[i + 1],
-          i >= props.toDraw.lines.length - 3
-            ? props.toDraw.lineColors[0]
-            : props.toDraw.lineColors[1]
-        );
-      }
-    }
 
-    if (
-      props.toDraw.phase === "Phase 2: Graham Scan on each partition" ||
-      props.toDraw.phase === "Phase 3: Jarvis March"
-    ) {
+    if (props.toDraw.phase === "Phase 2: Graham Scan on each partition") {
       for (let i = 0; i < props.toDraw.prevLines.length; i++) {
         for (let j = 0; j < props.toDraw.prevLines[i].length - 1; j++) {
           drawLine(
@@ -77,9 +51,93 @@ const CanvasChan = props => {
         }
       }
     }
+    if (props.toDraw.phase === "Phase 3: Jarvis March") {
+      for (let i = 0; i < props.toDraw.prevLines.length; i++) {
+        let tempColor = "#9ca3af";
+        if ("selectedPrevHull" in props.toDraw) {
+          if (i === props.toDraw.selectedPrevHull) tempColor = "#000000";
+        }
+        for (let j = 0; j < props.toDraw.prevLines[i].length - 1; j++) {
+          drawLine(
+            props.toDraw.prevLines[i][j],
+            props.toDraw.prevLines[i][j + 1],
+            tempColor
+          );
+        }
+      }
+    }
+    if (
+      props.toDraw.phase === "Phase 2: Graham Scan on each partition" ||
+      props.toDraw.phase === "Phase 3: Jarvis March"
+    ) {
+      if ("lines" in props.toDraw) {
+        for (let i = 0; i < props.toDraw.lines.length - 1; i++) {
+          drawLine(
+            props.toDraw.lines[i],
+            props.toDraw.lines[i + 1],
+            i >= props.toDraw.lines.length - 3
+              ? props.toDraw.lineColors[0]
+              : props.toDraw.lineColors[1]
+          );
+        }
+      }
+    }
+    if (
+      props.toDraw.phase === "Phase 1: Partition" ||
+      props.toDraw.phase === "Phase 2: Graham Scan on each partition" ||
+      props.toDraw.phase === "Phase 3: Jarvis March"
+    ) {
+      for (let i = 0; i < props.toDraw.partitions.length; i++) {
+        let tempColor = "#9ca3af";
+        if ("selectedPrevHull" in props.toDraw) {
+          if (i === props.toDraw.selectedPrevHull) tempColor = "#000000";
+        }
+        for (let j = 0; j < props.toDraw.partitions[i].length; j++) {
+          drawCoordinates(
+            props.toDraw.partitions[i][j][0],
+            props.toDraw.partitions[i][j][1],
+            props.toDraw.phase === "Phase 3: Jarvis March"
+              ? tempColor
+              : props.toDraw.color[i]
+          );
+        }
+      }
+    }
     if (
       props.toDraw.message === "Locate the lowest point and add it to the hull."
     ) {
+      drawCoordinates(
+        props.toDraw.pointsToColor[0],
+        props.toDraw.pointsToColor[1],
+        "#facc15"
+      );
+    }
+
+    if (
+      props.toDraw.message ===
+      "Using the best points calculated from each hull (highlighted in yellow), add the best point out of those to the partial hull (highlighted in green)."
+    ) {
+      for (let i = 0; i < props.toDraw.bestPoints.length; i++)
+        drawCoordinates(
+          props.toDraw.bestPoints[i][0],
+          props.toDraw.bestPoints[i][1],
+          "#facc15"
+        );
+      drawCoordinates(
+        props.toDraw.bestPointToColor[0],
+        props.toDraw.bestPointToColor[1],
+        "#16a34a"
+      );
+    }
+    if (
+      props.toDraw.message ===
+      "Find the tangent point of each hull which creates the minimum turning angle with the last segment in the partial hull. Green highlighted point is the current best point."
+    ) {
+      drawCoordinates(
+        props.toDraw.bestPointToColor[0],
+        props.toDraw.bestPointToColor[1],
+        "#16a34a"
+      );
       drawCoordinates(
         props.toDraw.pointsToColor[0],
         props.toDraw.pointsToColor[1],

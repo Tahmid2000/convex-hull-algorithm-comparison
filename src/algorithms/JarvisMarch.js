@@ -62,9 +62,7 @@ const generateHull = (points, visualize) => {
     for (let i = 0; i < points.length; i++) {
       if (points[i] === stack[stack.length - 1]) continue;
       var curOr = orientation(points[i], stack[stack.length - 1], bestPt);
-      if (curOr > 0) {
-        bestPt = points[i];
-      }
+
       if (visualize) {
         visuliazation.push({
           lines: [...stack, points[i]],
@@ -75,6 +73,9 @@ const generateHull = (points, visualize) => {
           message: `${"Checking for point which forms minimum turning angle with the last segment in the partial hull. Green highlighted point is the current best point."}`,
           stack: [...stack]
         });
+      }
+      if (curOr > 0) {
+        bestPt = points[i];
       }
     }
     stack.push(bestPt);
