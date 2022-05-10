@@ -2,8 +2,8 @@ import React from "react";
 
 const Information = () => {
   return (
-    <div  style={{"width": "1300px", "margin": "auto"}}>
-    <br />
+    <div style={{ width: "1300px", margin: "auto" }}>
+      <br />
       <hr />
       <h1 class="font-black text-2xl mt-3">Convex Hulls </h1>
       <p>
@@ -32,11 +32,10 @@ const Information = () => {
       <br />
       <hr />
       <h1 class="font-black text-red-700 text-2xl mt-3">Graham's Scan</h1>
-      <p >
+      <p>
         {
           "Graham’s Scan is a sorting-based algorithm to find a convex hull for a set of points in a time complexity of O(n logn), where n is the input size. The algorithm’s runtime is not dependent on the output size, unlike Jarvis’s March and Chan’s Algorithm. The version of the algorithm that was implemented and that we will be discussing is the Andrew (‘79) version as introduced in class. The algorithm begins by sorting the points from left to right. We then build the upper hull and lower hull separately. For the upper chain, we add the leftmost point to the convex hull first, as we know that this point must belong to the hull. We then test points going from left to right through the sorted list of points, maintaining the convexity of the chain. We store chain vertices in a stack, adding them as we see them from left to right. We use a utility function, orient(p, q, r), which tells us if the turn formed by points p, q, and r is counterclockwise or clockwise. In other words, if orient(p, q, r) > 0, we have a left-hand turn; if we have orient(p, q, r) < 0, we have a right-hand turn; if orient(p, q, r) = 0, then there is no turn. "
         }
-        <img src="./g1.png" alt=""/>
         {
           "We use this function to maintain our convexity of the chain, as we test our new point with the orient function. If orient(pi S[t], S[t-1]) results in a right hand turn, then S[t] must not belong to the upper chain, and we may pop it from the stack. If it is not a right hand turn, we can safely push pi onto the stack, setting S[t] to pi for the next iteration. Notice that this means that at the end of any iteration we only have left-hand turns, and thus by the end of it, we will have found the upper chain. Once we reach the rightmost point, the points belonging to the upper chain will be stored within the stack. To find the lower chain, we simply run the symmetric version of the algorithm by sorting the x-coordinates in descending order instead of ascending and concatenate the results found in both chains to form the final Convex Hull. Below is the basic pseudocode for find the upper-chain on a set of points, which can be modified to also find the lower-chain: "
         }
@@ -46,7 +45,7 @@ const Information = () => {
       </p>
       <br />
       <hr />
-      
+
       <h1 class="font-black text-indigo-700 text-2xl mt-3">Jarvis's March</h1>
       <p>
         {
@@ -72,8 +71,12 @@ const Information = () => {
         {
           "Using the modified Jarvis’s March, we keep adding points to the final convex hull till vi equals to the first point in the mini-hull or the number of points added to the final convex hull equals to h*. What if the guess for h was too low? In that case, the complete convex hull won’t be found and we return an empty final convex hull. Attached below is the pseudocode for Chan’s Algorithm: "
         }
-        {"To get the correct h, we want to guess h* such that  h < h* ≤ (h*)2 to ensure an efficient running time for the algorithm. To do this, we can start with a small value for h* such as 4, and keep squaring h* till we get a value that returns a final convex hull using the above pseudocode. The pseudocode for this modification is attached below, which uses the “ConditionalHull” algorithm from above:"}
-        {"Despite being a combination of the Graham’s Scan, which runs in O(n logn), and Jarvis’s March, which runs in O(nh), Chan’s algorithm has a better runtime complexity than both at O(n log h), where n is the number of points in the initial point set and h is the number of points in the final convex hull. For the discussion of the runtime, assume that h = h*, since h will be the biggest value for h*. Partitioning the initial point set takes O(n) time. Performing Graham’s Scan on each partition takes O(h logh) time because each mini-hull is at most size h. Since there are k subsets, the total runtime for the Graham’s Scan phase is O(k h logh), which simplifies to O(n log h). Finding the bottommost point takes O(n) time. To find each q, the point which creates the minimum turning angle with respect to the last two points in the convex hull, it takes O(k logh) time since we are running the binary search (O(logh)) time for k mini-hulls. If there are h points in the final convex hull, we run Jarvis’s March h times, giving a total runtime of O(h k logh), which simplifies to O(n log h). Adding the two phases together, we get a runtime complexity of O(n log h) for each h*, or the “ConditionalHull” part of the algorithm. The “ConditionalHull” is run a constant number of times, giving us a final runtime complexity of O(n log h). It has been proven by Kirkpatrick and Seidel(‘86) that it is impossible to find a convex hull with a better runtime."}
+        {
+          "To get the correct h, we want to guess h* such that  h < h* ≤ (h*)2 to ensure an efficient running time for the algorithm. To do this, we can start with a small value for h* such as 4, and keep squaring h* till we get a value that returns a final convex hull using the above pseudocode. The pseudocode for this modification is attached below, which uses the “ConditionalHull” algorithm from above:"
+        }
+        {
+          "Despite being a combination of the Graham’s Scan, which runs in O(n logn), and Jarvis’s March, which runs in O(nh), Chan’s algorithm has a better runtime complexity than both at O(n log h), where n is the number of points in the initial point set and h is the number of points in the final convex hull. For the discussion of the runtime, assume that h = h*, since h will be the biggest value for h*. Partitioning the initial point set takes O(n) time. Performing Graham’s Scan on each partition takes O(h logh) time because each mini-hull is at most size h. Since there are k subsets, the total runtime for the Graham’s Scan phase is O(k h logh), which simplifies to O(n log h). Finding the bottommost point takes O(n) time. To find each q, the point which creates the minimum turning angle with respect to the last two points in the convex hull, it takes O(k logh) time since we are running the binary search (O(logh)) time for k mini-hulls. If there are h points in the final convex hull, we run Jarvis’s March h times, giving a total runtime of O(h k logh), which simplifies to O(n log h). Adding the two phases together, we get a runtime complexity of O(n log h) for each h*, or the “ConditionalHull” part of the algorithm. The “ConditionalHull” is run a constant number of times, giving us a final runtime complexity of O(n log h). It has been proven by Kirkpatrick and Seidel(‘86) that it is impossible to find a convex hull with a better runtime."
+        }
       </p>
       <br />
       <hr />
@@ -81,12 +84,42 @@ const Information = () => {
       <br />
       <ol type="1">
         <li>Dr. Kyle Fox's Lecture Notes</li>
-        <li>David Mount's <a href="https://www.cs.umd.edu/class/fall2021/cmsc754/Lects/cmsc754-fall-2021-lects.pdf" rel="noreferrer" target="_blank" class="text-blue-500 font-bold">Lecture Notes</a></li>
+        <li>
+          David Mount's{" "}
+          <a
+            href="https://www.cs.umd.edu/class/fall2021/cmsc754/Lects/cmsc754-fall-2021-lects.pdf"
+            rel="noreferrer"
+            target="_blank"
+            class="text-blue-500 font-bold"
+          >
+            Lecture Notes
+          </a>
+        </li>
       </ol>
       <br />
-       <hr />
-       <br />
-      <p> Designed by <a href="https://www.linkedin.com/in/tahmidimran/" target="_blank" rel="noreferrer" class="text-green-500 font-bold">Tahmid</a> and <a href="https://www.linkedin.com/in/trent-haines-8bb3b2163/" target="_blank" rel="noreferrer" class="text-green-500 font-bold">Trent</a></p> 
+      <hr />
+      <br />
+      <p>
+        {" "}
+        Designed by{" "}
+        <a
+          href="https://www.linkedin.com/in/tahmidimran/"
+          target="_blank"
+          rel="noreferrer"
+          class="text-green-500 font-bold"
+        >
+          Tahmid
+        </a>{" "}
+        and{" "}
+        <a
+          href="https://www.linkedin.com/in/trent-haines-8bb3b2163/"
+          target="_blank"
+          rel="noreferrer"
+          class="text-green-500 font-bold"
+        >
+          Trent
+        </a>
+      </p>
       <br />
     </div>
   );
