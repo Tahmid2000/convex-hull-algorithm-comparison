@@ -10,49 +10,7 @@ const InitialCanvas = props => {
   const canvasRef = useRef(null);
   const [points, setPoints] = useState([]);
   const [stepByStep, setStepByStep] = useState(0);
-  var pp = [
-    [315, 507],
-    [572, 248],
-    [354, 644],
-    [714, 74],
-    [505, 316],
-    [452, 575],
-    [561, 553],
-    [432, 520],
-    [738, 374],
-    [721, 545]
-  ];
-  var points2 = [
-    [928, 511],
-    [64, 428],
-    [789, 119],
-    [813, 507],
-    [641, 526],
-    [626, 491],
-    [576, 390],
-    [109, 537],
-    [361, 150],
-    [486, 428],
-    [566, 90],
-    [359, 478],
-    [669, 475],
-    [104, 155],
-    [313, 100],
-    [326, 411],
-    [206, 327],
-    [710, 192],
-    [389, 482],
-    [505, 609],
-    [847, 627],
-    [613, 370],
-    [798, 559],
-    [228, 159],
-    [160, 456],
-    [418, 433],
-    [452, 647],
-    [346, 254],
-    [471, 218]
-  ];
+
   const drawCoordinates = (x, y, color) => {
     const canvas = canvasRef.current;
     const context = canvas.getContext("2d");
@@ -86,9 +44,9 @@ const InitialCanvas = props => {
 
   const generateRandom = () => {
     clearCanvas();
-    let numPoints = getRandomInt(10, 35);
+    let numPoints = getRandomInt(15, 45);
     for (let i = 0; i < numPoints; i++) {
-      let randomX = getRandomInt(50, 950);
+      let randomX = getRandomInt(50, 1250);
       let randomY = getRandomInt(50, 650);
       drawCoordinates(randomX, randomY, "#000000");
       setPoints(oldArray => [...oldArray, [randomX, randomY]]);
@@ -115,7 +73,7 @@ const InitialCanvas = props => {
   return (
     <div>
       <button
-        className="bg-slate-700 hover:bg-slate-800 text-white font-bold py-2 px-4 rounded disabled:bg-slate-900 mr-1"
+        className="bg-red-700 hover:bg-red-800 text-white font-bold py-2 px-4 rounded disabled:bg-red-900 mr-1"
         onClick={startStepByStepGraham}
         style={{ marginTop: "2rem" }}
         disabled={points.length < 2 || stepByStep}
@@ -123,7 +81,7 @@ const InitialCanvas = props => {
         Graham's Scan
       </button>
       <button
-        className="bg-slate-700 hover:bg-slate-800 text-white font-bold py-2 px-4 rounded disabled:bg-slate-900 mr-1"
+        className="bg-indigo-700 hover:bg-indigo-800 text-white font-bold py-2 px-4 rounded disabled:bg-indigo-900 mr-1"
         onClick={startStepByStepJarvis}
         style={{ marginTop: "2rem" }}
         disabled={points.length < 2 || stepByStep}
@@ -131,7 +89,7 @@ const InitialCanvas = props => {
         Jarvis's March
       </button>
       <button
-        className="bg-slate-700 hover:bg-slate-800 text-white font-bold py-2 px-4 rounded disabled:bg-slate-900"
+        className="bg-pink-700 hover:bg-pink-800 text-white font-bold py-2 px-4 rounded disabled:bg-pink-900"
         onClick={startStepByStepChan}
         style={{ marginTop: "2rem" }}
         disabled={points.length < 2 || stepByStep}
@@ -140,7 +98,7 @@ const InitialCanvas = props => {
       </button>
       <canvas
         ref={canvasRef}
-        width="1000px"
+        width="1300px"
         height="700px"
         style={{ border: "solid 2px #000000" }}
         onClick={handleClick}
@@ -151,13 +109,13 @@ const InitialCanvas = props => {
         <React.Fragment>
           <br />
           <button
-            className="bg-slate-700 hover:bg-slate-800 text-white font-bold py-2 px-4 rounded mr-1"
+            className="transition duration-200 ease-in-out bg-black hover:bg-white text-white hover:text-black hover:bg-white border-black border-2 font-bold py-2 px-4 rounded-lg mr-1"
             onClick={clearCanvas}
           >
             Clear Canvas
           </button>
           <button
-            className="bg-slate-700 hover:bg-slate-800 text-white font-bold py-2 px-4 rounded ml-1"
+            className="transition duration-200 ease-in-out bg-black hover:bg-white text-white hover:text-black hover:bg-white border-black border-2 font-bold py-2 px-4 rounded-lg ml-1"
             onClick={generateRandom}
           >
             Random Points
@@ -166,44 +124,26 @@ const InitialCanvas = props => {
       ) : stepByStep === 1 ? (
         <React.Fragment>
           <CanvasGrahamVisualization
-            points={points}
-            scanned={grahamScanVisualization(points)}
+            points={[...points]}
+            scanned={grahamScanVisualization([...points])}
+            stopFunction={stopStepByStep}
           />
-          <br />
-          <button
-            className="bg-slate-700 hover:bg-slate-800 text-white font-bold py-2 px-4 rounded mr-1"
-            onClick={stopStepByStep}
-          >
-            Stop Step-By-Step
-          </button>
         </React.Fragment>
       ) : stepByStep === 2 ? (
         <React.Fragment>
           <CanvasJarvisVisualization
-            points={points}
-            scanned={jarvisMarchVisualization(points)}
+            points={[...points]}
+            scanned={jarvisMarchVisualization([...points])}
+            stopFunction={stopStepByStep}
           />
-          <br />
-          <button
-            className="bg-slate-700 hover:bg-slate-800 text-white font-bold py-2 px-4 rounded mr-1"
-            onClick={stopStepByStep}
-          >
-            Stop Step-By-Step
-          </button>
         </React.Fragment>
       ) : (
         <React.Fragment>
           <CanvasChanVisualization
-            points={points2}
-            scanned={chanAlgorithmVisualization(points2)}
+            points={[...points]}
+            scanned={chanAlgorithmVisualization([...points])}
+            stopFunction={stopStepByStep}
           />
-          <br />
-          <button
-            className="bg-slate-700 hover:bg-slate-800 text-white font-bold py-2 px-4 rounded mr-1"
-            onClick={stopStepByStep}
-          >
-            Stop Step-By-Step
-          </button>
         </React.Fragment>
       )}
     </div>

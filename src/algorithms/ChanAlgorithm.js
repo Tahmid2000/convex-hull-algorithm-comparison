@@ -60,29 +60,33 @@ const tangentPoint = (pointi, pointi1, hull, visualize) => {
   var bestPt = pointi1;
   let visualizations = [];
   if (hull.length == 1) {
-    if (visualize)
-      visualizations.push({
-        pointsToColor: hull[0],
-        bestPointToColor: hull[0],
-        phase: "Phase 3: Jarvis March",
-        message:
-          "Find the tangent point of each hull which creates the minimum turning angle with the last segment in the partial hull. Green highlighted point is the current best point."
-      });
+    // if (visualize)
+    //   visualizations.push({
+    //     pointsToColor: hull[0],
+    //     bestPointToColor: hull[0],
+    //     phase: "Phase 3: Jarvis March",
+    //     message:
+    //       "Find the tangent point of each hull which creates the minimum turning angle with the last segment in the partial hull. Green highlighted point is the current best point."
+    //   });
     return [hull[0], visualizations];
   }
   for (let i = 0; i < hull.length - 1; i++) {
     if (hull[i] === pointi) continue;
     if (i !== 0 && hull[i] === hull[i - 1]) continue;
-    var curOr = orientation(hull[i], pointi, bestPt);
-    if (visualize) {
-      visualizations.push({
-        pointsToColor: hull[i],
-        bestPointToColor: bestPt,
-        phase: "Phase 3: Jarvis March",
-        message:
-          "Find the tangent point of each hull which creates the minimum turning angle with the last segment in the partial hull. Green highlighted point is the current best point."
-      });
+    if (hull[i] === undefined) {
+      console.log(`${i}, ${hull.length}`);
+      console.log(hull);
     }
+    var curOr = orientation(hull[i], pointi, bestPt);
+    // if (visualize) {
+    //   visualizations.push({
+    //     pointsToColor: hull[i],
+    //     bestPointToColor: bestPt,
+    //     phase: "Phase 3: Jarvis March",
+    //     message:
+    //       "Find the tangent point of each hull which creates the minimum turning angle with the last segment in the partial hull. Green highlighted point is the current best point."
+    //   });
+    // }
     if (curOr > 0) bestPt = hull[i];
   }
   return [bestPt, visualizations];
@@ -106,7 +110,7 @@ const partialHull = (points, h, visualize) => {
   let grahams = [];
   let prevHulls = [];
   for (let i = 0; i < k; i++) {
-    if (partitions[i].length <= 2) grahams[i] = [...partitions[i]];
+    if (partitions[i].length <= 1) grahams[i] = [...partitions[i]];
     else {
       if (visualize) {
         let grahamVisualized = grahamScanVisualization(partitions[i]);
@@ -134,7 +138,7 @@ const partialHull = (points, h, visualize) => {
       color: [...colors],
       pointsToColor: [...v[0]],
       phase: "Phase 3: Jarvis March",
-      message: "Locate the lowest point and add it to the hull.",
+      message: "Locate the lowest point and add it to the partial hull.",
       prevLines: [...prevHulls]
     });
   }
@@ -149,17 +153,17 @@ const partialHull = (points, h, visualize) => {
         visualize
       );
       let tempPoint = tangent[0];
-      if (visualize) {
-        for (let k = 0; k < tangent[1].length; k++) {
-          tangent[1][k].partitions = [...partitions];
-          tangent[1][k].color = [...colors];
-          tangent[1][k].prevLines = [...prevHulls];
-          tangent[1][k].selectedPrevHull = j;
-          tangent[1][k].lines = [...v, tangent[1][k].pointsToColor];
-          tangent[1][k].lineColors = ["#b91c1c", "#16a34a"];
-        }
-        visualizations = visualizations.concat(tangent[1]);
-      }
+      // if (visualize) {
+      //   for (let k = 0; k < tangent[1].length; k++) {
+      //     tangent[1][k].partitions = [...partitions];
+      //     tangent[1][k].color = [...colors];
+      //     tangent[1][k].prevLines = [...prevHulls];
+      //     tangent[1][k].selectedPrevHull = j;
+      //     tangent[1][k].lines = [...v, tangent[1][k].pointsToColor];
+      //     tangent[1][k].lineColors = ["#b91c1c", "#16a34a"];
+      //   }
+      //   visualizations = visualizations.concat(tangent[1]);
+      // }
       bestPts.push(tempPoint);
       if (bestPt.length == 0) bestPt = [...tempPoint];
       else if (orientation(tempPoint, v[v.length - 1], bestPt) > 0)
@@ -173,7 +177,7 @@ const partialHull = (points, h, visualize) => {
         bestPointToColor: bestPt,
         phase: "Phase 3: Jarvis March",
         message:
-          "Using the best points calculated from each hull (highlighted in yellow), add the best point out of those to the partial hull (highlighted in green).",
+          "Using the right tangent points from each mini-hull with respect to the current partial hull (highlighted in yellow), add the best point to the hull (highlighted in green).",
         prevLines: [...prevHulls],
         lines: [...v],
         lineColors: ["#b91c1c", "#16a34a"]
@@ -211,7 +215,8 @@ const generateHull = (points, visualize) => {
   if (visualize) {
     visualizations.push({
       phase: "Phase 0: Initial Points",
-      message: "Initial Points."
+      message:
+        "Initial Points. First, attempt to build a convex hull with at most 4 points."
     });
   }
   let h = 2;

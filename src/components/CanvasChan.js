@@ -104,7 +104,8 @@ const CanvasChan = props => {
       }
     }
     if (
-      props.toDraw.message === "Locate the lowest point and add it to the hull."
+      props.toDraw.message ===
+      "Locate the lowest point and add it to the partial hull."
     ) {
       drawCoordinates(
         props.toDraw.pointsToColor[0],
@@ -115,7 +116,7 @@ const CanvasChan = props => {
 
     if (
       props.toDraw.message ===
-      "Using the best points calculated from each hull (highlighted in yellow), add the best point out of those to the partial hull (highlighted in green)."
+      "Using the right tangent points from each mini-hull with respect to the current partial hull (highlighted in yellow), add the best point to the hull (highlighted in green)."
     ) {
       for (let i = 0; i < props.toDraw.bestPoints.length; i++)
         drawCoordinates(
@@ -151,7 +152,7 @@ const CanvasChan = props => {
       <div className="">
         <canvas
           ref={canvasRef}
-          width="1000px"
+          width="1300px"
           height="700px"
           style={{ border: "solid 2px #000000" }}
           className="mx-auto rounded mt-2"

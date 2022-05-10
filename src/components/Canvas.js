@@ -63,7 +63,7 @@ const Canvas = props => {
       <div className="">
         <canvas
           ref={canvasRef}
-          width="1000px"
+          width="1300px"
           height="700px"
           style={{ border: "solid 2px #000000" }}
           className="mx-auto rounded mt-2"
