@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { jarvisMarchVisualization } from "../algorithms/JarvisMarch";
 import Canvas from "./Canvas";
 
 const CanvasJarvisMarchVisualization = ({ points, scanned, stopFunction }) => {

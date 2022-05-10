@@ -1,11 +1,5 @@
 import React, { useEffect, useState } from "react";
-
 import CanvasChan from "./CanvasChan";
-// import {
-//   generateHull,
-//   chanAlgorithm,
-//   chanAlgorithmVisualization
-// } from "../algorithms/ChanAlgorithm";
 
 const CanvasChanVisualization = ({ points, scanned, stopFunction }) => {
   const [step, setStep] = useState(0);

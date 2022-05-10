@@ -46,20 +46,20 @@ const orientation = (p, q, r) => {
     [1, r[0], r[1]]
   ];
   let val = determinant(matrix);
-  if (val == 0) return 0;
+  if (val === 0) return 0;
   else if (val < 0) return -1;
   return 1;
 };
 
-var mod = function(n, m) {
-  var remain = n % m;
-  return Math.floor(remain >= 0 ? remain : remain + m);
-};
+// var mod = function(n, m) {
+//   var remain = n % m;
+//   return Math.floor(remain >= 0 ? remain : remain + m);
+// };
 
 const tangentPoint = (pointi, pointi1, hull, visualize) => {
   var bestPt = pointi1;
   let visualizations = [];
-  if (hull.length == 1) {
+  if (hull.length === 1) {
     // if (visualize)
     //   visualizations.push({
     //     pointsToColor: hull[0],
@@ -165,7 +165,7 @@ const partialHull = (points, h, visualize) => {
       //   visualizations = visualizations.concat(tangent[1]);
       // }
       bestPts.push(tempPoint);
-      if (bestPt.length == 0) bestPt = [...tempPoint];
+      if (bestPt.length === 0) bestPt = [...tempPoint];
       else if (orientation(tempPoint, v[v.length - 1], bestPt) > 0)
         bestPt = [...tempPoint];
     }

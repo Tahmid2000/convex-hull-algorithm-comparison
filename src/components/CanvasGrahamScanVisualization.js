@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { grahamScanVisualization } from "../algorithms/GrahamScan";
 import Canvas from "./Canvas";
 
 const CanvasGrahamScanVisualization = ({ points, scanned, stopFunction }) => {
