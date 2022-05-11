@@ -1,1 +1,1 @@
-# Convex Hull Algorithm Comparison
+# Convex Hull Algorithm Visualizer
